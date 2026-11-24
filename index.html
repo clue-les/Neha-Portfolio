@@ -130,11 +130,11 @@
   .avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 10px 28px rgba(42,34,48,.22);display:block;margin:0 auto 6px}
   .hello-row{display:flex;gap:22px;align-items:center}
   .hello-row img{width:130px;height:130px;border-radius:50%;object-fit:cover;flex:none;border:4px solid #fff;box-shadow:0 6px 18px rgba(42,34,48,.18)}
-  @media (max-width:560px){.hello-row{flex-direction:column;align-items:flex-start}.hello-row img{width:96px;height:96px}}
+  @media (max-width:560px){.hello-row{flex-direction:column;align-items:center;gap:10px;text-align:left}.hello-row img{width:84px;height:84px}.hello-row p{margin:0}}
   /* ---------- Room card ---------- */
-  #room{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:20px;background:rgba(42,34,48,.35);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .4s, visibility .4s}
+  #room{position:fixed;inset:0;height:100vh;height:100dvh;z-index:30;display:grid;place-items:center;padding:20px;background:rgba(42,34,48,.35);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .4s, visibility .4s}
   #room.show{opacity:1;visibility:visible}
-  .card{position:relative;width:min(760px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);border-radius:18px;box-shadow:0 30px 80px rgba(42,34,48,.35);transform:scale(.55) translateY(40px);opacity:0;transition:transform .55s cubic-bezier(.2,.9,.25,1.15), opacity .35s;border-top:10px solid var(--c,#2f5d62)}
+  .card{position:relative;width:min(760px,100%);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto;overscroll-behavior:contain;background:var(--paper);border-radius:18px;box-shadow:0 30px 80px rgba(42,34,48,.35);transform:scale(.55) translateY(40px);opacity:0;transition:transform .55s cubic-bezier(.2,.9,.25,1.15), opacity .35s;border-top:10px solid var(--c,#2f5d62)}
   #room.show .card{transform:none;opacity:1}
   .card-head{padding:28px 32px 6px;display:flex;align-items:baseline;gap:14px}
   .card-head .big{font-family:Fraunces,serif;font-size:56px;font-weight:700;color:var(--c);line-height:.8}
@@ -159,7 +159,7 @@
   .contact a:hover{border-color:var(--c)}
   .contact a small{color:var(--muted);font-weight:400}
   .card-foot{position:sticky;bottom:0;display:flex;justify-content:space-between;gap:10px;padding:16px 32px 22px;background:linear-gradient(to top,var(--paper) 75%,rgba(255,250,242,0))}
-  .card-foot button{border:0;border-radius:999px;padding:11px 18px;font-weight:700}
+  .card-foot button{white-space:nowrap;border:0;border-radius:999px;padding:11px 18px;font-weight:700}
   .btn-ghost{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.5px #dccbb1}
   .btn-main{background:var(--c);color:#fff}
   .xbtn{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:0;background:#f0e5d4;font-size:20px;line-height:1;color:var(--ink)}
@@ -174,8 +174,12 @@
     .dots{gap:0;padding:4px}.dots button{padding:7px 8px}
     #nextBtn{padding:11px 14px;font-size:14px}
     .card-foot button{font-size:14px;padding:10px 14px}
-    #room{padding:10px;align-items:end}
-    .card{max-height:calc(100vh - 20px)}
+    #room{padding:8px 8px calc(8px + env(safe-area-inset-bottom));align-items:end}
+    .card{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);border-radius:16px}
+    .card-head .lbl{font-size:10.5px;letter-spacing:.14em}
+    .card-head h2{font-size:24px}
+    .card-body{font-size:15px;line-height:1.55}
+    .xbtn{top:10px;right:10px;width:32px;height:32px}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms!important;transition-duration:.01ms!important}
@@ -473,7 +477,9 @@ function openRoom(i){
   $("#roomTitle").textContent = r.title;
   $("#roomBody").innerHTML = r.html;
   $("#prevBtn").style.visibility = i === 0 ? "hidden" : "visible";
-  $("#next2Btn").textContent = i === ROOMS.length-1 ? "Walk back to the start ↺" : `Next door: ${ROOMS[i+1].label} →`;
+  const narrow = innerWidth < 440;
+  $("#next2Btn").textContent = i === ROOMS.length-1 ? (narrow ? "Back to start ↺" : "Walk back to the start ↺") : (narrow ? "Next door →" : `Next door: ${ROOMS[i+1].label} →`);
+  $("#prevBtn").textContent = narrow ? "← Back" : "← Previous door";
   card.scrollTop = 0;
   $("#room").classList.add("show");
   setTimeout(()=>$("#next2Btn").focus({preventScroll:true}), 350);
