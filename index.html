@@ -14,6 +14,7 @@
     --dh:320px; --dw:160px;
   }
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   html,body{margin:0;height:100%;overflow:hidden;background:var(--wall);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif}
   button{font:inherit;cursor:pointer}
 
@@ -86,7 +87,7 @@
   @keyframes knock{0%{transform:rotate(0)}20%{transform:rotate(-82deg)}34%{transform:rotate(-66deg)}48%{transform:rotate(-82deg)}62%{transform:rotate(-66deg)}76%{transform:rotate(-82deg)}100%{transform:rotate(0)}}
   #neha.waving .armF{animation:wave 1.2s ease-in-out}
   @keyframes wave{0%,100%{transform:rotate(0)}25%,75%{transform:rotate(-150deg)}50%{transform:rotate(-125deg)}}
-  .bubble{position:absolute;left:55%;bottom:100%;margin-bottom:8px;background:#fff;color:var(--ink);padding:8px 12px;border-radius:14px 14px 14px 4px;font-size:14px;font-weight:500;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.14);opacity:0;transform:translateY(6px);transition:.3s;pointer-events:none}
+  .bubble{position:absolute;left:55%;bottom:100%;margin-bottom:8px;background:#fff;color:var(--ink);padding:8px 12px;border-radius:14px 14px 14px 4px;font-size:14px;font-weight:500;white-space:normal;width:max-content;max-width:min(240px,58vw);box-shadow:0 4px 14px rgba(0,0,0,.14);opacity:0;transform:translateY(6px);transition:.3s;pointer-events:none}
   .bubble.show{opacity:1;transform:none}
 
   /* ---------- HUD ---------- */
@@ -170,6 +171,13 @@
     .card-head{padding:24px 20px 4px}.card-head .big{font-size:42px}
     .card-body{padding:6px 20px}.card-foot{padding:14px 20px 18px}
     #counter{display:none}
+  }
+  @media (max-width:440px){
+    #hud{gap:6px;padding-left:6px;padding-right:6px}
+    .dots{padding:3px}
+    .dots button{padding:6px 7px;font-size:12px}
+    #nextBtn{padding:10px 13px;font-size:13.5px}
+    .bubble{left:40%;font-size:13px}
     #hud{gap:6px;padding-left:8px;padding-right:8px}
     .dots{gap:0;padding:4px}.dots button{padding:7px 8px}
     #nextBtn{padding:11px 14px;font-size:14px}
@@ -388,7 +396,7 @@ function layout(){
   const W = innerWidth, H = innerHeight;
   const dh = Math.max(180, Math.min(H*0.46, 330, W*0.62)), dw = dh*0.5;
   const spacing = dw + Math.max(170, Math.min(W*0.5, 430));
-  const pad = W;
+  const pad = W + spacing*2;
   document.documentElement.style.setProperty("--dh", dh+"px");
   document.documentElement.style.setProperty("--dw", dw+"px");
   const charH = dh*0.74, charW = charH*0.5;
@@ -490,7 +498,8 @@ function updateHud(lock){
   [...$("#dots").children].forEach((b,i)=>{ b.classList.toggle("on", i===cur); b.disabled = !!lock; });
   const nb = $("#nextBtn");
   nb.disabled = !!lock;
-  nb.textContent = cur < 0 ? "Knock on door 1 →" : cur >= ROOMS.length-1 ? "Back to door 1 ↺" : "Next door →";
+  const nr = innerWidth < 440;
+  nb.textContent = cur < 0 ? (nr ? "Start →" : "Knock on door 1 →") : cur >= ROOMS.length-1 ? (nr ? "Restart ↺" : "Back to door 1 ↺") : (nr ? "Next →" : "Next door →");
   $("#counter").textContent = cur < 0 ? "" : `Door ${cur+1} of ${ROOMS.length}`;
 }
 function next(){ go(cur >= ROOMS.length-1 ? 0 : cur+1); }
@@ -514,7 +523,7 @@ addEventListener("keydown", e=>{
   else if(e.key==="ArrowLeft") go(cur-1);
   else if(e.key==="Escape") closeRoom();
 });
-addEventListener("resize", ()=> layout());
+addEventListener("resize", ()=>{ layout(); updateHud(busy); });
 
 build(); layout(); updateHud();
 </script>
