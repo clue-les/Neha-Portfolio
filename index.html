@@ -102,7 +102,7 @@
   #nextBtn:disabled{opacity:.5;cursor:default}
   #brand{position:fixed;top:16px;left:20px;z-index:20;font-family:Fraunces,serif;font-weight:700;font-size:18px}
   #brand small{display:block;font-family:"DM Sans";font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-  #counter{position:fixed;top:20px;right:20px;z-index:20;font-size:13px;color:var(--muted);font-weight:500}
+  #counter{position:fixed;top:24px;right:150px;z-index:20;font-size:13px;color:var(--muted);font-weight:500}
 
   /* ---------- Intro ---------- */
   #intro{position:fixed;inset:0;z-index:40;display:flex;background:radial-gradient(ellipse at 50% 30%, #fff0d2, #f1e6d6 70%);overflow:auto;transition:opacity .7s, visibility .7s;padding:24px;text-align:center}
@@ -161,6 +161,40 @@
     .ppanel{padding:14px}
     .pc-head h3{font-size:19px}
   }
+  #menuBtn{position:fixed;top:14px;right:16px;z-index:25;border:0;background:#2a2230;color:#f8ead0;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px}
+  #menuBtn svg{width:16px;height:16px}
+  #menu{position:fixed;inset:0;z-index:45;background:rgba(42,34,48,.45);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;justify-content:flex-end}
+  #menu.show{opacity:1;visibility:visible}
+  .mpanel{width:min(400px,100%);height:100%;background:var(--paper);box-shadow:-20px 0 50px rgba(0,0,0,.2);transform:translateX(30px);transition:transform .35s cubic-bezier(.2,.9,.25,1);display:flex;flex-direction:column;padding:22px 20px calc(18px + env(safe-area-inset-bottom))}
+  #menu.show .mpanel{transform:none}
+  .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .mhead h2{font-family:Fraunces,serif;font-size:26px;margin:0}
+  .mhint{color:var(--muted);font-size:14px;margin:0 0 14px}
+  .mlist{list-style:none;margin:0;padding:0;overflow:auto;flex:1}
+  .mlist button{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid #eadfcd;background:#fff;border-radius:12px;padding:11px 14px;margin-bottom:8px;color:var(--ink)}
+  .mlist button:hover,.mlist button:focus-visible{border-color:var(--mc);outline:none}
+  .mlist button.on{border-color:var(--mc);box-shadow:inset 4px 0 0 var(--mc)}
+  .mlist .mn{font-family:Fraunces,serif;font-weight:700;font-size:22px;color:var(--mc);width:34px}
+  .mlist .mt{display:flex;flex-direction:column}
+  .mlist .mt b{font-size:15px}
+  .mlist .mt small{color:var(--muted);font-size:13px}
+  .mswitch{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #eadfcd;padding-top:14px;margin-top:6px;font-size:14px}
+  .mswitch small{display:block;color:var(--muted);font-size:12.5px}
+  .tog{position:relative;width:46px;height:26px;border-radius:999px;border:0;background:#d6c9b5;flex:none;transition:background .2s}
+  .tog::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .tog[aria-checked="true"]{background:#2f5d62}
+  .tog[aria-checked="true"]::after{transform:translateX(20px)}
+  .mkeys{color:var(--muted);font-size:12.5px;margin-top:10px}
+  #intro .skip{display:block;margin:14px auto 0;background:none !important;box-shadow:none !important;color:var(--ink) !important;font-size:15px !important;padding:6px !important;text-decoration:underline;text-underline-offset:3px}
+  .card-foot .mid{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px #dccbb1}
+  @media (max-width:700px){
+    #menuBtn{top:10px;right:10px;padding:9px 13px;font-size:13px}
+    .mpanel{width:100%;height:auto;max-height:88vh;max-height:88dvh;margin-top:auto;border-radius:18px 18px 0 0;transform:translateY(30px)}
+    #menu{align-items:flex-end}
+    .mkeys{display:none}
+  }
+  @media (hover:none){.mkeys{display:none}}
+  body.intro-on #menuBtn{visibility:hidden}
   /* ---------- Room card ---------- */
   #room{position:fixed;inset:0;height:100vh;height:100dvh;z-index:30;display:grid;place-items:center;padding:20px;background:rgba(42,34,48,.35);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .4s, visibility .4s}
   #room.show{opacity:1;visibility:visible}
@@ -333,6 +367,16 @@
 
 <div id="brand">Neha Lakshmanan<small>Project Coordinator</small></div>
 <div id="counter"></div>
+<button id="menuBtn" aria-haspopup="dialog" aria-controls="menu"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg><span>All rooms</span></button>
+<div id="menu" role="dialog" aria-modal="true" aria-label="All rooms">
+  <div class="mpanel">
+    <div class="mhead"><h2>All rooms</h2><button class="xbtn" id="mClose" style="position:static" aria-label="Close">×</button></div>
+    <p class="mhint">Jump straight to any room. You don't need to open the doors in order.</p>
+    <ul class="mlist" id="mlist"></ul>
+    <div class="mswitch"><span><b>Quick mode</b><small>Skip the walking and knocking</small></span><button class="tog" id="quickTog" role="switch" aria-checked="false" aria-label="Quick mode"></button></div>
+    <div class="mkeys">Keys: 1–7 to jump · ← → to move · M for this menu · Esc to close</div>
+  </div>
+</div>
 
 <div id="hud">
   <div class="dots" id="dots"></div>
@@ -346,6 +390,7 @@
     <h1>Neha Lakshmanan</h1>
     <p>Project Coordinator at Codilar Technologies, coordinating Shopify commerce projects for international clients. Seven doors, seven rooms: walk down the hall with me and see what's behind each one.</p>
     <button id="startBtn">Knock on the first door</button>
+    <button class="skip" id="skipBtn">Skip the walk, show me all rooms</button>
     <div class="hint"><span class="hint-desk">Tip: use ← → keys, or click any door</span><span class="hint-touch">Tip: tap any door, or use the buttons at the bottom</span></div>
   </div>
 </div>
@@ -355,7 +400,7 @@
     <button class="xbtn" id="xBtn" aria-label="Back to the hallway">×</button>
     <div class="card-head"><div class="big" id="roomNum"></div><div><div class="lbl" id="roomLbl"></div><h2 id="roomTitle"></h2></div></div>
     <div class="card-body" id="roomBody"></div>
-    <div class="card-foot"><button class="btn-ghost" id="prevBtn">← Previous door</button><button class="btn-main" id="next2Btn">Next door →</button></div>
+    <div class="card-foot"><button class="btn-ghost" id="prevBtn">← Previous door</button><button class="mid" id="roomsBtn">All rooms</button><button class="btn-main" id="next2Btn">Next door →</button></div>
   </div>
 </div>
 
@@ -466,7 +511,11 @@ const ROOMS = [
 const $ = s => document.querySelector(s);
 const world = $("#world"), neha = $("#neha"), bubble = $("#bubble");
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const wait = ms => new Promise(r => setTimeout(r, reduced ? 0 : ms));
+let quick = false, jumping = false;
+try{ quick = localStorage.getItem("nl-quick")==="1"; }catch(e){}
+const instant = () => reduced || quick || jumping;
+const wait = ms => new Promise(r => setTimeout(r, instant() ? 0 : ms));
+const SLUGS = ["hello","now","clients","toolkit","before","credentials","contact"];
 let G = {}, cur = -1, busy = false, tx = 0;
 const doors = [];
 
@@ -527,13 +576,14 @@ async function walkTo(i){
   if(dist < 2) return;
   const ms = Math.min(2600, 500 + dist*1.7);
   neha.classList.add("walking");
-  setTx(to, reduced ? 0 : ms);
+  setTx(to, instant() ? 0 : ms);
   await wait(ms);
   neha.classList.remove("walking");
 }
 
-async function go(i){
+async function go(i, opts){
   if(busy || i < 0 || i >= ROOMS.length) return;
+  jumping = !!(opts && opts.jump);
   busy = true; updateHud(true);
   closeRoom();
   await wait(250);
@@ -546,7 +596,7 @@ async function go(i){
   const d = doors[i];
   if(!d.classList.contains("open")){
     neha.classList.add("knocking"); d.classList.add("shake");
-    d.querySelectorAll(".knock-txt").forEach((k,n)=> setTimeout(()=>k.classList.add("go"), reduced?0:n*380+150));
+    if(!instant()) d.querySelectorAll(".knock-txt").forEach((k,n)=> setTimeout(()=>k.classList.add("go"), n*380+150));
     await wait(1200);
     neha.classList.remove("knocking"); d.classList.remove("shake");
     d.querySelectorAll(".knock-txt").forEach(k=>k.classList.remove("go"));
@@ -556,6 +606,7 @@ async function go(i){
     await wait(150);
   }
   openRoom(i);
+  jumping = false;
   busy = false; updateHud();
 }
 
@@ -571,8 +622,10 @@ function openRoom(i){
   const narrow = innerWidth < 440;
   $("#next2Btn").textContent = i === ROOMS.length-1 ? (narrow ? "Back to start ↺" : "Walk back to the start ↺") : (narrow ? "Next door →" : `Next door: ${ROOMS[i+1].label} →`);
   $("#prevBtn").textContent = narrow ? "← Back" : "← Previous door";
+  $("#roomsBtn").textContent = narrow ? "Rooms" : "All rooms";
   card.scrollTop = 0;
   $("#room").classList.add("show");
+  try{ history.replaceState(null, "", "#" + SLUGS[i]); }catch(e){}
   setTimeout(()=>$("#next2Btn").focus({preventScroll:true}), 350);
 }
 function closeRoom(){ $("#room").classList.remove("show"); }
@@ -584,6 +637,7 @@ function updateHud(lock){
   const nr = innerWidth < 440;
   nb.textContent = cur < 0 ? (nr ? "Start →" : "Knock on door 1 →") : cur >= ROOMS.length-1 ? (nr ? "Restart ↺" : "Back to door 1 ↺") : (nr ? "Next →" : "Next door →");
   $("#counter").textContent = cur < 0 ? "" : `Door ${cur+1} of ${ROOMS.length}`;
+  [...$("#mlist").querySelectorAll("button")].forEach((b,i)=> b.classList.toggle("on", i===cur));
 }
 function next(){ go(cur >= ROOMS.length-1 ? 0 : cur+1); }
 
@@ -600,14 +654,47 @@ $("#roomBody").addEventListener("click", e=>{
 $("#xBtn").addEventListener("click", ()=>{ closeRoom(); say("Pick any door, or tap Next."); });
 $("#room").addEventListener("click", e=>{ if(e.target.id==="room") closeRoom(); });
 $("#startBtn").addEventListener("click", async ()=>{
-  document.body.classList.remove("intro-on");
-  $("#intro").classList.add("gone");
+  leaveIntro();
   await wait(500);
   neha.classList.add("waving"); say("Hi! Let's go see what's behind door 1.", 1800);
   await wait(1500); neha.classList.remove("waving");
   go(0);
 });
+
+// ---------- Navigation menu ----------
+function buildMenu(){
+  $("#mlist").innerHTML = ROOMS.map((r,i)=>`<li><button data-i="${i}" style="--mc:${r.color}"><span class="mn">${String(i+1).padStart(2,"0")}</span><span class="mt"><b>${r.label}</b><small>${r.title}</small></span></button></li>`).join("");
+  setQuick(quick);
+}
+function setQuick(v){
+  quick = v; $("#quickTog").setAttribute("aria-checked", String(v));
+  try{ localStorage.setItem("nl-quick", v ? "1" : "0"); }catch(e){}
+}
+function openMenu(){ $("#menu").classList.add("show"); setTimeout(()=>{ const b=$("#mlist button.on")||$("#mlist button"); b && b.focus({preventScroll:true}); }, 200); }
+function closeMenu(){ $("#menu").classList.remove("show"); }
+function leaveIntro(){
+  if(!document.body.classList.contains("intro-on")) return;
+  document.body.classList.remove("intro-on");
+  $("#intro").classList.add("gone");
+}
+async function jumpTo(i){
+  closeMenu(); leaveIntro();
+  if(i === cur && $("#room").classList.contains("show")) return;
+  await go(i, {jump:true});
+}
+$("#menuBtn").addEventListener("click", openMenu);
+$("#roomsBtn").addEventListener("click", openMenu);
+$("#mClose").addEventListener("click", closeMenu);
+$("#menu").addEventListener("click", e=>{ if(e.target.id==="menu") closeMenu(); });
+$("#mlist").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) jumpTo(+b.dataset.i); });
+$("#quickTog").addEventListener("click", ()=> setQuick(!quick));
+$("#skipBtn").addEventListener("click", ()=>{ leaveIntro(); openMenu(); });
+addEventListener("hashchange", ()=>{ const i = SLUGS.indexOf(location.hash.slice(1)); if(i>=0 && i!==cur) jumpTo(i); });
 addEventListener("keydown", e=>{
+  if(e.target.closest && e.target.closest("input,textarea")) return;
+  if(/^[1-7]$/.test(e.key)){ jumpTo(+e.key-1); return; }
+  if(e.key==="m"||e.key==="M"){ $("#menu").classList.contains("show") ? closeMenu() : openMenu(); return; }
+  if(e.key==="Escape" && $("#menu").classList.contains("show")){ closeMenu(); return; }
   if($("#intro").classList.contains("gone") === false) { if(e.key==="Enter") $("#startBtn").click(); return; }
   if(e.key==="ArrowRight") next();
   else if(e.key==="ArrowLeft") go(cur-1);
@@ -615,7 +702,8 @@ addEventListener("keydown", e=>{
 });
 addEventListener("resize", ()=>{ layout(); updateHud(busy); });
 
-build(); layout(); updateHud();
+build(); buildMenu(); layout(); updateHud();
+{ const i = SLUGS.indexOf(location.hash.slice(1)); if(i >= 0) jumpTo(i); }
 </script>
 </body>
 </html>
